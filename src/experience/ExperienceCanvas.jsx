@@ -17,13 +17,14 @@ function easeOut(t) {
 }
 
 // ─── Materials ─────────────────────────────────────────────────────────────
-const mRed    = new THREE.MeshStandardMaterial({ color: '#CC0000', metalness: 0.3, roughness: 0.25 })
-const mCarbon = new THREE.MeshStandardMaterial({ color: '#111111', metalness: 0.2, roughness: 0.55 })
-const mWhite  = new THREE.MeshStandardMaterial({ color: '#F0F0F0', metalness: 0.1, roughness: 0.3 })
-const mGold   = new THREE.MeshStandardMaterial({ color: '#D4AF37', metalness: 0.7, roughness: 0.2, emissive: '#3a2900', emissiveIntensity: 0.3 })
-const mGlass  = new THREE.MeshStandardMaterial({ color: '#88AADD', metalness: 0.8, roughness: 0.1, transparent: true, opacity: 0.7 })
-const mTyre   = new THREE.MeshStandardMaterial({ color: '#1a1a1a', metalness: 0.0, roughness: 0.95 })
-const mRim    = new THREE.MeshStandardMaterial({ color: '#888888', metalness: 0.85, roughness: 0.15 })
+const mRed    = new THREE.MeshStandardMaterial({ color: '#CC0000', metalness: 0.35, roughness: 0.18, envMapIntensity: 2.0 })
+const mCarbon = new THREE.MeshStandardMaterial({ color: '#0d0d0d', metalness: 0.25, roughness: 0.50, envMapIntensity: 1.2 })
+const mWhite  = new THREE.MeshStandardMaterial({ color: '#EFEFEF', metalness: 0.08, roughness: 0.28 })
+const mGold   = new THREE.MeshStandardMaterial({ color: '#D4AF37', metalness: 0.7, roughness: 0.18, emissive: '#3a2900', emissiveIntensity: 0.3 })
+const mDark   = new THREE.MeshStandardMaterial({ color: '#040404', metalness: 0.05, roughness: 0.85 })
+const mDarkC  = new THREE.MeshStandardMaterial({ color: '#1a1a1a', metalness: 0.40, roughness: 0.35, envMapIntensity: 1.5 })
+const mTyre   = new THREE.MeshStandardMaterial({ color: '#181818', metalness: 0.0, roughness: 0.96 })
+const mRim    = new THREE.MeshStandardMaterial({ color: '#888888', metalness: 0.88, roughness: 0.12 })
 
 // ─── Wheel (single) ────────────────────────────────────────────────────────
 function Wheel({ pos, front }) {
@@ -63,131 +64,235 @@ function Wheel({ pos, front }) {
   )
 }
 
-// ─── Car (full assembled) ──────────────────────────────────────────────────
+// ─── Car (full assembled — realistic geometry) ────────────────────────────
 function CarFull({ groupRef }) {
   return (
     <group ref={groupRef}>
-      {/* Chassis */}
-      <mesh material={mCarbon} position={[0, 0, 0]}>
-        <boxGeometry args={[0.50, 0.155, 3.0]} />
+
+      {/* ── NOSE CONE — tapered cylinders ── */}
+      <mesh material={mWhite} position={[0, 0.015, 3.62]} rotation={[-Math.PI/2, 0, 0]}>
+        <cylinderGeometry args={[0.012, 0.036, 0.48, 10]} />
+      </mesh>
+      <mesh material={mRed} position={[0, 0.018, 3.13]} rotation={[-Math.PI/2, 0, 0]}>
+        <cylinderGeometry args={[0.036, 0.072, 0.58, 10]} />
+      </mesh>
+      <mesh material={mRed} position={[0, 0.022, 2.55]} rotation={[-Math.PI/2, 0, 0]}>
+        <cylinderGeometry args={[0.072, 0.130, 0.64, 10]} />
+      </mesh>
+      <mesh material={mRed} position={[0, 0.035, 2.10]}>
+        <boxGeometry args={[0.33, 0.135, 0.55]} />
+      </mesh>
+      <mesh material={mRed} position={[0, 0.06, 1.82]}>
+        <boxGeometry args={[0.42, 0.155, 0.28]} />
       </mesh>
 
-      {/* Nose step 1 */}
-      <mesh material={mRed} position={[0, -0.01, 1.60]}>
-        <boxGeometry args={[0.32, 0.10, 0.80]} />
+      {/* ── MONOCOQUE ── */}
+      <mesh material={mRed} position={[0, 0.080, 0.45]}>
+        <boxGeometry args={[0.52, 0.145, 2.80]} />
       </mesh>
-      {/* Nose step 2 */}
-      <mesh material={mRed} position={[0, -0.03, 2.12]}>
-        <boxGeometry args={[0.22, 0.075, 0.58]} />
+      <mesh material={mRed} position={[0.28, 0.180, 0.45]} rotation={[0, 0, 0.32]}>
+        <boxGeometry args={[0.05, 0.155, 2.60]} />
       </mesh>
-      {/* Nose tip */}
-      <mesh material={mWhite} position={[0, -0.045, 2.55]}>
-        <boxGeometry args={[0.10, 0.055, 0.50]} />
+      <mesh material={mRed} position={[-0.28, 0.180, 0.45]} rotation={[0, 0, -0.32]}>
+        <boxGeometry args={[0.05, 0.155, 2.60]} />
       </mesh>
-
-      {/* Engine cover / airbox */}
-      <mesh material={mRed} position={[0, 0.25, -0.4]}>
-        <boxGeometry args={[0.28, 0.30, 1.50]} />
+      <mesh material={mRed} position={[0, 0.225, 0.45]}>
+        <boxGeometry args={[0.36, 0.065, 2.60]} />
       </mesh>
-      {/* Airbox intake */}
-      <mesh material={mCarbon} position={[0, 0.44, 0.10]}>
-        <boxGeometry args={[0.22, 0.12, 0.40]} />
+      <mesh material={mRed} position={[0, 0.080, -1.50]}>
+        <boxGeometry args={[0.44, 0.138, 0.55]} />
       </mesh>
 
-      {/* Sidepod L */}
-      <mesh material={mRed} position={[0.56, 0.04, 0.12]}>
-        <boxGeometry args={[0.28, 0.26, 1.80]} />
+      {/* ── COCKPIT ── */}
+      <mesh material={mDarkC} position={[0, 0.265, 0.70]}>
+        <boxGeometry args={[0.50, 0.075, 0.50]} />
       </mesh>
-      {/* Sidepod inlet L */}
-      <mesh material={mCarbon} position={[0.70, 0.06, 0.74]}>
-        <boxGeometry args={[0.06, 0.18, 0.60]} />
+      <mesh material={mDark} position={[0, 0.235, 0.72]}>
+        <boxGeometry args={[0.30, 0.055, 0.38]} />
       </mesh>
-      {/* Sidepod R */}
-      <mesh material={mRed} position={[-0.56, 0.04, 0.12]}>
-        <boxGeometry args={[0.28, 0.26, 1.80]} />
+      <mesh material={mDarkC} position={[ 0.26, 0.26, 0.68]}>
+        <boxGeometry args={[0.04, 0.12, 0.48]} />
       </mesh>
-      {/* Sidepod inlet R */}
-      <mesh material={mCarbon} position={[-0.70, 0.06, 0.74]}>
-        <boxGeometry args={[0.06, 0.18, 0.60]} />
+      <mesh material={mDarkC} position={[-0.26, 0.26, 0.68]}>
+        <boxGeometry args={[0.04, 0.12, 0.48]} />
+      </mesh>
+      <mesh material={mRed} position={[0, 0.305, 0.35]}>
+        <boxGeometry args={[0.20, 0.085, 0.26]} />
+      </mesh>
+      <mesh material={mDarkC} position={[0, 0.240, 0.96]}>
+        <boxGeometry args={[0.52, 0.22, 0.055]} />
       </mesh>
 
-      {/* Floor */}
-      <mesh material={mCarbon} position={[0, -0.10, 0.0]}>
-        <boxGeometry args={[1.40, 0.025, 3.20]} />
+      {/* ── ROLL HOOP & AIRBOX ── */}
+      <mesh material={mRed} position={[0, 0.360, -0.02]}>
+        <boxGeometry args={[0.34, 0.30, 0.42]} />
       </mesh>
-      {/* Diffuser */}
-      <mesh material={mCarbon} position={[0, -0.05, -1.62]} rotation={[0.25, 0, 0]}>
-        <boxGeometry args={[1.10, 0.06, 0.55]} />
+      <mesh material={mDarkC} position={[0, 0.58, -0.06]}>
+        <boxGeometry args={[0.20, 0.38, 0.32]} />
       </mesh>
-      {[-1, 1].map((side, i) => (
-        <mesh key={i} material={mCarbon} position={[side * 0.38, -0.08, -1.55]}>
-          <boxGeometry args={[0.04, 0.18, 0.52]} />
+      <mesh material={mDark} position={[0, 0.575, 0.13]}>
+        <boxGeometry args={[0.13, 0.08, 0.04]} />
+      </mesh>
+
+      {/* ── ENGINE COVER ── */}
+      <mesh material={mRed} position={[0, 0.205, -0.72]}>
+        <boxGeometry args={[0.46, 0.285, 1.45]} />
+      </mesh>
+      <mesh material={mRed} position={[ 0.24, 0.285, -0.72]} rotation={[0, 0, 0.28]}>
+        <boxGeometry args={[0.05, 0.22, 1.40]} />
+      </mesh>
+      <mesh material={mRed} position={[-0.24, 0.285, -0.72]} rotation={[0, 0, -0.28]}>
+        <boxGeometry args={[0.05, 0.22, 1.40]} />
+      </mesh>
+      <mesh material={mDarkC} position={[0, 0.545, -0.68]}>
+        <boxGeometry args={[0.028, 0.32, 0.78]} />
+      </mesh>
+
+      {/* ── SIDEPODS ── */}
+      <mesh material={mRed} position={[ 0.46, 0.135, 0.14]}>
+        <boxGeometry args={[0.325, 0.230, 1.95]} />
+      </mesh>
+      <mesh material={mRed} position={[ 0.46, 0.262, 0.14]} rotation={[0, 0, 0.22]}>
+        <boxGeometry args={[0.05, 0.15, 1.90]} />
+      </mesh>
+      <mesh material={mDarkC} position={[ 0.52, 0.040, 0.20]} rotation={[0, 0, -0.30]}>
+        <boxGeometry args={[0.06, 0.08, 1.60]} />
+      </mesh>
+      <mesh material={mDark} position={[ 0.57, 0.148, 0.92]}>
+        <boxGeometry args={[0.06, 0.170, 0.45]} />
+      </mesh>
+      <mesh material={mDarkC} position={[ 0.555, 0.150, 1.17]}>
+        <boxGeometry args={[0.075, 0.18, 0.055]} />
+      </mesh>
+      <mesh material={mRed} position={[ 0.40, 0.12, -0.90]} rotation={[0, 0.12, 0]}>
+        <boxGeometry args={[0.24, 0.195, 0.50]} />
+      </mesh>
+      {/* Right sidepod */}
+      <mesh material={mRed} position={[-0.46, 0.135, 0.14]}>
+        <boxGeometry args={[0.325, 0.230, 1.95]} />
+      </mesh>
+      <mesh material={mRed} position={[-0.46, 0.262, 0.14]} rotation={[0, 0, -0.22]}>
+        <boxGeometry args={[0.05, 0.15, 1.90]} />
+      </mesh>
+      <mesh material={mDarkC} position={[-0.52, 0.040, 0.20]} rotation={[0, 0, 0.30]}>
+        <boxGeometry args={[0.06, 0.08, 1.60]} />
+      </mesh>
+      <mesh material={mDark} position={[-0.57, 0.148, 0.92]}>
+        <boxGeometry args={[0.06, 0.170, 0.45]} />
+      </mesh>
+      <mesh material={mDarkC} position={[-0.555, 0.150, 1.17]}>
+        <boxGeometry args={[0.075, 0.18, 0.055]} />
+      </mesh>
+      <mesh material={mRed} position={[-0.40, 0.12, -0.90]} rotation={[0, -0.12, 0]}>
+        <boxGeometry args={[0.24, 0.195, 0.50]} />
+      </mesh>
+
+      {/* ── FLOOR & DIFFUSER ── */}
+      <mesh material={mDarkC} position={[0, -0.035, 0.30]}>
+        <boxGeometry args={[1.05, 0.030, 3.60]} />
+      </mesh>
+      <mesh material={mDarkC} position={[ 0.50, -0.025, 0.30]}>
+        <boxGeometry args={[0.04, 0.045, 3.20]} />
+      </mesh>
+      <mesh material={mDarkC} position={[-0.50, -0.025, 0.30]}>
+        <boxGeometry args={[0.04, 0.045, 3.20]} />
+      </mesh>
+      <mesh material={mDarkC} position={[0, 0.042, -1.92]} rotation={[0.30, 0, 0]}>
+        <boxGeometry args={[0.82, 0.052, 0.72]} />
+      </mesh>
+      {[-0.28, -0.14, 0, 0.14, 0.28].map((x, i) => (
+        <mesh key={i} material={mDarkC} position={[x, 0.038, -1.88]} rotation={[0.30, 0, 0]}>
+          <boxGeometry args={[0.025, 0.18, 0.68]} />
         </mesh>
       ))}
 
-      {/* Halo */}
-      <mesh material={mGold} position={[0, 0.30, 0.55]} rotation={[0, 0, Math.PI / 2]}>
-        <torusGeometry args={[0.38, 0.030, 8, 24, Math.PI]} />
+      {/* ── HALO ── */}
+      <mesh material={mGold} position={[0, 0.495, 0.65]}>
+        <torusGeometry args={[0.215, 0.026, 8, 24, Math.PI]} />
       </mesh>
-      <mesh material={mGold} position={[0, 0.38, 0.10]}>
-        <boxGeometry args={[0.035, 0.22, 0.08]} />
+      <mesh material={mGold} position={[0, 0.390, 0.90]}>
+        <cylinderGeometry args={[0.024, 0.024, 0.235, 8]} />
       </mesh>
 
-      {/* Front wing */}
-      <group position={[0, -0.06, 3.28]}>
-        <mesh material={mRed}>
-          <boxGeometry args={[2.05, 0.048, 0.52]} />
-        </mesh>
-        <mesh material={mRed} position={[0, 0.07, -0.18]} rotation={[-0.16, 0, 0]}>
-          <boxGeometry args={[1.72, 0.038, 0.30]} />
-        </mesh>
-        <mesh material={mRed} position={[0, 0.13, -0.30]} rotation={[-0.24, 0, 0]}>
-          <boxGeometry args={[1.30, 0.032, 0.24]} />
-        </mesh>
+      {/* ── FRONT WING ── */}
+      <group position={[0, -0.10, 3.32]}>
+        <mesh material={mRed}><boxGeometry args={[2.12, 0.044, 0.56]} /></mesh>
+        <mesh material={mRed} position={[0, 0.065, -0.19]} rotation={[-0.17, 0, 0]}><boxGeometry args={[1.82, 0.036, 0.32]} /></mesh>
+        <mesh material={mRed} position={[0, 0.125, -0.33]} rotation={[-0.24, 0, 0]}><boxGeometry args={[1.42, 0.030, 0.26]} /></mesh>
+        <mesh material={mRed} position={[0, 0.182, -0.43]} rotation={[-0.30, 0, 0]}><boxGeometry args={[0.96, 0.026, 0.20]} /></mesh>
         {[-1, 1].map((s, i) => (
-          <mesh key={i} material={mCarbon} position={[s * 1.04, 0.07, -0.06]}>
-            <boxGeometry args={[0.035, 0.28, 0.62]} />
+          <group key={i}>
+            <mesh material={mCarbon} position={[s * 1.07, 0.08, -0.05]}><boxGeometry args={[0.032, 0.32, 0.66]} /></mesh>
+            <mesh material={mCarbon} position={[s * 0.92, 0.042, 0.22]} rotation={[0, s * 0.28, s * 0.12]}><boxGeometry args={[0.16, 0.022, 0.24]} /></mesh>
+          </group>
+        ))}
+        {[-1, 1].map((s, i) => (
+          <mesh key={i} material={mCarbon} position={[s * 0.32, 0.16, 0.10]} rotation={[0.20, 0, s * 0.04]}>
+            <boxGeometry args={[0.030, 0.14, 0.30]} />
           </mesh>
         ))}
       </group>
 
-      {/* Rear wing */}
-      <group position={[0, 0.72, -1.96]}>
-        <mesh material={mRed}>
-          <boxGeometry args={[1.00, 0.052, 0.40]} />
-        </mesh>
-        <mesh material={mRed} position={[0, 0.07, 0.08]} rotation={[-0.10, 0, 0]}>
-          <boxGeometry args={[0.92, 0.040, 0.22]} />
-        </mesh>
+      {/* ── REAR WING ── */}
+      <group position={[0, 0.76, -1.98]}>
+        <mesh material={mRed}><boxGeometry args={[1.06, 0.050, 0.42]} /></mesh>
+        <mesh material={mRed} position={[0, 0.068, 0.08]} rotation={[-0.12, 0, 0]}><boxGeometry args={[0.98, 0.038, 0.24]} /></mesh>
         {[-1, 1].map((s, i) => (
-          <mesh key={i} material={mCarbon} position={[s * 0.53, 0.04, 0.04]}>
-            <boxGeometry args={[0.038, 0.20, 0.50]} />
-          </mesh>
+          <mesh key={i} material={mCarbon} position={[s * 0.55, 0.04, 0.04]}><boxGeometry args={[0.036, 0.22, 0.52]} /></mesh>
         ))}
+        <mesh material={mCarbon} position={[0, -0.24, 0.06]}><boxGeometry args={[0.80, 0.028, 0.24]} /></mesh>
         {[-1, 1].map((s, i) => (
-          <mesh key={i} material={mCarbon} position={[s * 0.22, -0.34, 0.02]} rotation={[0.06, 0, s * 0.12]}>
-            <cylinderGeometry args={[0.024, 0.020, 0.72, 8]} />
-          </mesh>
+          <group key={i}>
+            <mesh material={mCarbon} position={[s * 0.22, -0.18, 0.02]} rotation={[0.10, 0, s * 0.08]}>
+              <cylinderGeometry args={[0.024, 0.020, 0.38, 8]} />
+            </mesh>
+            <mesh material={mCarbon} position={[s * 0.24, -0.42, 0.02]} rotation={[0.04, 0, s * 0.14]}>
+              <cylinderGeometry args={[0.022, 0.018, 0.40, 8]} />
+            </mesh>
+          </group>
         ))}
       </group>
 
-      {/* Suspension arms */}
+      {/* ── SUSPENSION — proper A-arms ── */}
       {[1, -1].map((side, i) => (
         <group key={i}>
-          <mesh material={mCarbon} position={[side * 0.62, -0.02, 1.65]} rotation={[0, 0, side * 0.15]}>
-            <cylinderGeometry args={[0.018, 0.018, 0.32, 6]} />
+          <mesh material={mDarkC} position={[side * 0.42, 0.13, 1.80]} rotation={[0, side * 0.22, side * 0.14]}>
+            <cylinderGeometry args={[0.014, 0.014, 0.40, 6]} />
           </mesh>
-          <mesh material={mCarbon} position={[side * 0.62, -0.02, -1.44]} rotation={[0, 0, side * 0.15]}>
-            <cylinderGeometry args={[0.018, 0.018, 0.32, 6]} />
+          <mesh material={mDarkC} position={[side * 0.42, 0.13, 1.62]} rotation={[0, -side * 0.22, side * 0.14]}>
+            <cylinderGeometry args={[0.014, 0.014, 0.40, 6]} />
+          </mesh>
+          <mesh material={mDarkC} position={[side * 0.44, 0.00, 1.80]} rotation={[0, side * 0.18, -side * 0.10]}>
+            <cylinderGeometry args={[0.013, 0.013, 0.38, 6]} />
+          </mesh>
+          <mesh material={mDarkC} position={[side * 0.44, 0.00, 1.62]} rotation={[0, -side * 0.18, -side * 0.10]}>
+            <cylinderGeometry args={[0.013, 0.013, 0.38, 6]} />
+          </mesh>
+          <mesh material={mDarkC} position={[side * 0.44, 0.13, -1.35]} rotation={[0, side * 0.20, side * 0.12]}>
+            <cylinderGeometry args={[0.014, 0.014, 0.44, 6]} />
+          </mesh>
+          <mesh material={mDarkC} position={[side * 0.44, 0.13, -1.53]} rotation={[0, -side * 0.20, side * 0.12]}>
+            <cylinderGeometry args={[0.014, 0.014, 0.44, 6]} />
+          </mesh>
+          <mesh material={mDarkC} position={[side * 0.46, 0.00, -1.35]} rotation={[0, side * 0.16, -side * 0.08]}>
+            <cylinderGeometry args={[0.013, 0.013, 0.42, 6]} />
+          </mesh>
+          <mesh material={mDarkC} position={[side * 0.46, 0.00, -1.53]} rotation={[0, -side * 0.16, -side * 0.08]}>
+            <cylinderGeometry args={[0.013, 0.013, 0.42, 6]} />
           </mesh>
         </group>
       ))}
 
+      {/* ── LIVERY ── */}
+      <mesh material={mGold} position={[0, 0.233, 0.45]}>
+        <boxGeometry args={[0.525, 0.010, 2.75]} />
+      </mesh>
+
       {/* Wheels */}
-      <Wheel pos={[ 0.76, 0, 1.65]} front={true} />
-      <Wheel pos={[-0.76, 0, 1.65]} front={true} />
-      <Wheel pos={[ 0.84, 0, -1.44]} front={false} />
-      <Wheel pos={[-0.84, 0, -1.44]} front={false} />
+      <Wheel pos={[ 0.76, 0, 1.68]} front={true} />
+      <Wheel pos={[-0.76, 0, 1.68]} front={true} />
+      <Wheel pos={[ 0.86, 0, -1.44]} front={false} />
+      <Wheel pos={[-0.86, 0, -1.44]} front={false} />
     </group>
   )
 }
@@ -234,14 +339,17 @@ function AssemblyScene() {
       </AssemblyPart>
 
       <AssemblyPart def={PART_DEFS[1]}>
-        <mesh material={mRed} position={[0, -0.01, 1.60]}>
-          <boxGeometry args={[0.32, 0.10, 0.80]} />
+        <mesh material={mWhite} position={[0, 0.015, 3.62]} rotation={[-Math.PI/2, 0, 0]}>
+          <cylinderGeometry args={[0.012, 0.036, 0.48, 10]} />
         </mesh>
-        <mesh material={mRed} position={[0, -0.03, 2.12]}>
-          <boxGeometry args={[0.22, 0.075, 0.58]} />
+        <mesh material={mRed} position={[0, 0.018, 3.13]} rotation={[-Math.PI/2, 0, 0]}>
+          <cylinderGeometry args={[0.036, 0.072, 0.58, 10]} />
         </mesh>
-        <mesh material={mWhite} position={[0, -0.045, 2.55]}>
-          <boxGeometry args={[0.10, 0.055, 0.50]} />
+        <mesh material={mRed} position={[0, 0.022, 2.55]} rotation={[-Math.PI/2, 0, 0]}>
+          <cylinderGeometry args={[0.072, 0.130, 0.64, 10]} />
+        </mesh>
+        <mesh material={mRed} position={[0, 0.035, 2.10]}>
+          <boxGeometry args={[0.33, 0.135, 0.55]} />
         </mesh>
       </AssemblyPart>
 
