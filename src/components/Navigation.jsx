@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import useSceneStore from '../store/useSceneStore'
 
 const SECTIONS = ['Emergence', 'Systems', 'Tunnel', 'Velocity', 'Race', 'Anatomy', 'Legend']
@@ -20,9 +21,10 @@ export default function Navigation() {
           F1<span>X</span>
         </div>
         <ul className="nav-links">
-          {['Performance', 'Technology', 'Experience'].map((item) => (
+          {['Performance', 'Technology'].map((item) => (
             <li key={item}><a href="#">{item}</a></li>
           ))}
+          <li key="Experience"><Link to="/experience">Experience</Link></li>
         </ul>
         <div style={{
           fontFamily: "'Space Mono', monospace",

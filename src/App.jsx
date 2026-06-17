@@ -1,3 +1,4 @@
+import { Routes, Route } from 'react-router-dom'
 import { useLenis } from './hooks/useLenis'
 import useSceneStore from './store/useSceneStore'
 import Loader from './components/Loader'
@@ -15,8 +16,9 @@ import RaceSection from './sections/RaceSection'
 import AnatomySection from './sections/AnatomySection'
 import AssemblySection from './sections/AssemblySection'
 import HeroSection from './sections/HeroSection'
+import Experience from './pages/Experience'
 
-export default function App() {
+function HomePage() {
   useLenis()
   const scrollProgress = useSceneStore((s) => s.scrollProgress)
 
@@ -71,5 +73,14 @@ export default function App() {
       {/* Invisible scroll height — 900vh */}
       <div style={{ height: '900vh' }} aria-hidden="true" />
     </>
+  )
+}
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/experience" element={<Experience />} />
+    </Routes>
   )
 }
