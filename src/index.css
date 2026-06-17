@@ -314,6 +314,43 @@ body {
   line-height: 0.85;
   letter-spacing: -0.02em;
   display: block;
+  /* 3D extruded depth effect */
+  text-shadow:
+    0 1px 0 rgba(220,220,220,0.9),
+    0 2px 0 rgba(180,180,180,0.85),
+    0 3px 0 rgba(150,150,150,0.8),
+    0 4px 0 rgba(120,120,120,0.75),
+    0 5px 0 rgba(100,100,100,0.7),
+    0 6px 0 rgba(80,80,80,0.6),
+    0 7px 0 rgba(60,60,60,0.5),
+    0 8px 0 rgba(40,40,40,0.4),
+    0 10px 14px rgba(0,0,0,0.55);
+}
+
+/* Red 3D extrusion at high speed */
+.speed-number.fast {
+  text-shadow:
+    0 1px 0 #cc0000,
+    0 2px 0 #b30000,
+    0 3px 0 #990000,
+    0 4px 0 #800000,
+    0 5px 0 #660000,
+    0 6px 0 #4d0000,
+    0 7px 0 #330000,
+    0 8px 0 #1a0000,
+    0 10px 16px rgba(0,0,0,0.6);
+}
+
+/* Yellow 3D extrusion at mid speed */
+.speed-number.mid {
+  text-shadow:
+    0 1px 0 #ccaa00,
+    0 2px 0 #aa8800,
+    0 3px 0 #886600,
+    0 4px 0 #664400,
+    0 5px 0 #443300,
+    0 6px 0 #332200,
+    0 8px 14px rgba(0,0,0,0.55);
 }
 
 .speed-unit {

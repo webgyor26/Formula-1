@@ -32,15 +32,10 @@ export default function VelocitySection() {
       }}>
         Peak Velocity
       </div>
-      <div style={{
-        fontFamily: "'Bebas Neue', sans-serif",
-        fontSize: 'clamp(96px, 17vw, 255px)',
-        lineHeight: 0.82,
-        color,
-        textShadow: speed > 300 ? `0 0 80px ${color}` : 'none',
-        transition: 'color 0.2s, text-shadow 0.2s',
-        letterSpacing: '-0.025em',
-      }}>
+      <div
+        className={`speed-number${speed > 280 ? ' fast' : speed > 150 ? ' mid' : ''}`}
+        style={{ color, transition: 'color 0.15s' }}
+      >
         {Math.round(speed)}
       </div>
       <div style={{

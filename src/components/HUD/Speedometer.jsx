@@ -119,7 +119,10 @@ export default function Speedometer() {
           transform: 'translate(-50%, -50%)',
           pointerEvents: 'none',
         }}>
-          <span className="speed-number" style={{ color: speedColor, transition: 'color 0.2s' }}>
+          <span
+            className={`speed-number${speed > 280 ? ' fast' : speed > 150 ? ' mid' : ''}`}
+            style={{ color: speedColor, transition: 'color 0.15s' }}
+          >
             {Math.round(speed)}
           </span>
           <span className="speed-unit">KM / H</span>
