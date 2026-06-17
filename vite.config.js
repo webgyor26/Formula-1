@@ -11,14 +11,6 @@ export default defineConfig({
     include: ['three', 'gsap'],
   },
   build: {
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          'three': ['three'],
-          'react-three': ['@react-three/fiber', '@react-three/drei', '@react-three/postprocessing'],
-          'vendor': ['react', 'react-dom', 'framer-motion', 'gsap', 'zustand'],
-        }
-      }
-    }
-  }
+    chunkSizeWarningLimit: 2000,
+  },
 })
